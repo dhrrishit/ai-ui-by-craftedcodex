@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-UI by CraftedCodeX</title>
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Senthrix AI Chat - Intelligent Conversational Experience">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-html.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container" role="main">
+        <aside class="sidebar" aria-label="Chat Sidebar">
+            <div class="brand">
+                <span class="brand-text">AI-UI</span>
+                by CraftedCodeX
+            </div>
+            <button class="new-chat-btn" id="newChatBtn" aria-label="Create new chat">
+                <i class="fas fa-plus"></i>
+                New Chat
+            </button>
+            <div class="search-container">
+                <label for="chatSearch" class="sr-only">Search conversations</label>
+                <input type="search" id="chatSearch" placeholder="Search conversations..." aria-label="Search chats">
+            </div>
+            <div class="chat-history" id="chatHistory" role="list" aria-label="Chat History">
+                <div class="history-label">Chat History</div>
+                <div class="empty-state" id="historyEmptyState">
+                    No conversations yet. Start chatting!
+                </div>
+            </div>
+            <form action="https://craftedcodex.vercel.app/" method="get" class="initiate-form">
+                <button id="initiateButton" class="initiate-button" aria-label="Initiate new chat" type="submit">
+                    CraftedCodeX
+                </button>
+            </form>
+        </aside>
+        <main class="main-chat">
+
+            <div class="messages-area" id="messagesArea" aria-live="polite">
+                <div class="empty-state" id="messagesEmptyState">
+                    <h2>Welcome to AI-UI</h2>
+                    <p>Start a new conversation by typing a message below</p>
+                </div>
+            </div>
+            <div class="input-area">
+                <form id="messageForm" aria-label="Message Input Form">
+                    <div class="api-key-container">
+                        <label for="apiKeyInput">API Key:</label>
+                        <input type="password" id="apiKeyInput" placeholder="Enter API Key" aria-label="API Key Input">
+                        <div class="ai-provider-select">
+                            <input type="radio" id="googleAiRadio" name="aiProvider" value="google" checked>
+                            <label for="googleAiRadio">Google's Gemini (Fastest)</label>
+                            <input type="radio" id="openAiRadio" name="aiProvider" value="openai">
+                            <label for="openAiRadio">OpenAI</label>
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <label for="messageInput" class="sr-only">Type your message</label>
+                        <textarea id="messageInput" placeholder="Type what's on your consciousness..." rows="1"
+                            aria-label="Message Input" maxlength="1000"></textarea>
+                        <button type="button" class="clear-btn glass-effect" id="clearInputBtn"
+                            aria-label="Clear message">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <div class="input-buttons">
+                            <button type="submit" class="send-btn glass-effect" aria-label="Send message"
+                                title="Send Message">   
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="disclaimer" role="note">
+                    Designed by CraftedCodeX • For Non-Commercial Use Only
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js" defer></script>
+</body>
+
+</html>
