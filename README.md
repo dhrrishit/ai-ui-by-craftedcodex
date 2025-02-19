@@ -6,7 +6,7 @@
 
 A GitHub-hosted project showcasing an interactive chatbot UI built with modern web technologies.  It provides a seamless and responsive interface for users to engage with AI-driven conversations, making it ideal for testing chatbot models, integrating APIs, or enhancing user interactions. The code is designed for easy customization, featuring a clean layout, message handling, and optional AI integrations.  Created with passion by CraftedCodeX.
 
-[**Live Demo**](https://craftedcodex.vercel.app/AI-UI) (Coming Soon - Link to a deployed version of the project)
+[**Live Demo**](https://craftedcodex.vercel.app/AI-UI) 
 
 ## Table of Contents
 
@@ -71,13 +71,13 @@ A GitHub-hosted project showcasing an interactive chatbot UI built with modern w
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/CraftedCodeX/AI-UI.git
+    git clone https://github.com/dhrrishit/ai-ui-by-craftedcodex
     ```
 
 2.  **Navigate to the project directory:**
 
     ```bash
-    cd AI-UI
+    cd ai-ui-by-craftedcodex
     ```
 
 3.  **Open `index.html` in your browser.**
@@ -105,13 +105,6 @@ A GitHub-hosted project showcasing an interactive chatbot UI built with modern w
 6.  **Search Chat:**
      * Use the Search bar to find chats based on the title.
 
-## Customization
-
-*   **Styling (CSS):** Modify the `styles.css` file to change the appearance of the UI.
-*   **JavaScript Functionality:** Edit the `script.js` file to customize the behavior of the chatbot UI.
-*   **Fonts**: Change the font by modifying the `@import` statement for 'Poppins' in `styles.css` and updating the `font-family` property in the appropriate CSS rules.
-*   **Colors:** All colors are set as CSS variables in the `:root` selector.
-*   **Themes:**  Create new CSS classes or switch between multiple CSS files to change the theme.
 
 ## API Integration
 
@@ -141,5 +134,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 *   **Prism.js**: Syntax highlighting.
 *   **Google AI**: For providing the Gemini AI model.
 *   **OpenAI**: For providing the OpenAI models.
+
+
+## Author
+**Dhrrishit Deka**
+- **Email**: dhrrishit@gmail.com
+- **GitHub**: https://github.com/dhrrishit
+- **LinkedIn**: https://www.linkedin.com/in/dhrrishitdeka/
+- **X (Twitter)**: https://x.com/dhrrishitdeka
 
 Feel free to reach out with any questions or feedback! We hope this project provides a solid foundation for your chatbot UI needs.
