@@ -550,13 +550,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function init() {
         setupEventListeners();
 
-        if (initiateButton) {
-            initiateButton.addEventListener('click', function(event) {
-                event.preventDefault();
-                window.location.href = 'Senthrix.pdf';
-            });
-        }
-
         const hasLoadedState = utils.loadState();
 
         const chatIds = Object.keys(STATE.chats);
