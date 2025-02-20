@@ -227,7 +227,7 @@ body {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
-}
+    }
 
 .user-message {
     background: var(--primary-gradient);
@@ -340,34 +340,33 @@ body {
 }
 
 .typing-indicator {
-    background: rgba(255, 255, 255, 0.05);
     align-self: flex-start;
-    border: 1px solid var(--glass-border);
-    padding: 0.8rem;
     display: flex;
     align-items: center;
+    font-style: italic;
+    color: var(--text-secondary);
+    padding: 0.2rem 0; 
+    margin-left: 1rem; 
+    margin-bottom: 0.5rem; 
 }
 
-.typing-indicator .dots {
-    display: flex;
-    gap: 0.3rem;
+.shining-text {
+    animation: textShine 1.3s linear infinite; 
 }
 
-.typing-indicator .dots span {
-    width: 0.5rem;
-    height: 0.5rem;
-    background-color: #aaa;
-    border-radius: 50%;
-    animation: bounce 1s infinite;
+@keyframes textShine {
+    0% {
+        opacity: 0.6; 
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 20px var(--primary-gradient), 0 0 40px var(--primary-gradient); 
+    }
+    100% {
+        opacity: 0.6;
+    }
 }
 
-.typing-indicator .dots span:nth-child(2) { animation-delay: 0.2s; }
-.typing-indicator .dots span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes bounce {
-    0%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-0.5rem); }
-}
 
 .empty-state {
     display: flex;
@@ -640,7 +639,7 @@ body {
     text-align: center;
     text-decoration: dotted;
     padding: 0.4rem;
-   
+
   }
   @media screen and (max-width: 768px) {
     .chat-header {
@@ -655,11 +654,11 @@ body {
     .chat-header h1 {
 display: none;
     }
-    
+
   }
 pre[class*="language-"] {
     background: #2d2d2d;
-    color: #ccc;
+    color: #eee; 
     border-radius: 8px;
     padding: 1rem;
     overflow: auto;
@@ -667,35 +666,33 @@ pre[class*="language-"] {
 
 code[class*="language-"] {
     color: #fff;
-    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-family: 'Courier New', Courier, monospace; 
     text-shadow: none;
 }
 .typing-indicator {
-    background: rgba(255, 255, 255, 0.05);
     align-self: flex-start;
-    border: 1px solid var(--glass-border);
-    padding: 0.8rem;
     display: flex;
     align-items: center;
+    font-style: italic;
+    color: var(--text-secondary);
+    padding: 0.2rem 0;
+    margin-left: 1rem; 
+    margin-bottom: 0.5rem; 
 }
 
-.typing-indicator .dots {
-    display: flex;
-    gap: 0.3rem;
+.shining-text {
+    animation: textShine 1.3s linear infinite; 
 }
 
-.typing-indicator .dots span {
-    width: 0.5rem;
-    height: 0.5rem;
-    background-color: #aaa;
-    border-radius: 50%;
-    animation: bounce 1s infinite;
-}
-
-.typing-indicator .dots span:nth-child(2) { animation-delay: 0.2s; }
-.typing-indicator .dots span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes bounce {
-    0%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-0.5rem); }
+@keyframes textShine {
+    0% {
+        opacity: 0.5; 
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 20px var(--primary-gradient), 0 0 40px var(--primary-gradient); 
+    }
+    100% {
+        opacity: 0.7; 
+    }
 }

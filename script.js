@@ -125,46 +125,53 @@ document.addEventListener('DOMContentLoaded', function() {
             messagesEmptyState.style.display = hasMessages ? 'none' : 'flex';
         },
            showTypingIndicator() {
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'typing-indicator';
-            typingDiv.innerHTML = `
-                <div class="dots">
-                    <span></span><span></span><span></span>
-                </div>
-            `;
-            messagesArea.appendChild(typingDiv);
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-            return typingDiv;
-        },
+             const typingDiv = document.createElement('div');
+             typingDiv.className = 'typing-indicator';
+             let indicatorText = ["Reasoning...", "Deep Approach..."];
+             let textIndex = 0;
+             typingDiv.textContent = indicatorText[textIndex];
+             typingDiv.classList.add('shining-text');
 
-        hideTypingIndicator(typingDiv) {
-            if (typingDiv && typingDiv.parentNode) {
-                typingDiv.parentNode.removeChild(typingDiv);
-            }
-        },
-        async displayBotMessage(formatted) {
-            return new Promise((resolve) => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message bot-message`;
-                messagesArea.appendChild(messageDiv);
-                messagesArea.scrollTop = messagesArea.scrollHeight;
+             const textInterval = setInterval(() => {
+                 textIndex = (textIndex + 1) % indicatorText.length;
+                 typingDiv.textContent = indicatorText[textIndex];
+             }, 2000);
 
-                let index = 0;
-                const typingInterval = setInterval(() => {
-                    if (index < formatted.length) {
-                        messageDiv.innerHTML = formatted.substring(0, index + 1);
-                        messagesArea.scrollTop = messagesArea.scrollHeight;
-                        index++;
-                    } else {
-                        clearInterval(typingInterval);
-                        messageDiv.innerHTML = formatted;
-                        Prism.highlightAll();
-                        resolve();
-                    }
-                }, 20);
-            });
-        }
-    };
+             typingDiv.dataset.textInterval = textInterval;
+             messagesArea.appendChild(typingDiv);
+             messagesArea.scrollTop = messagesArea.scrollHeight;
+             return typingDiv;
+         },
+
+         hideTypingIndicator(typingDiv) {
+             if (typingDiv && typingDiv.parentNode) {
+                 clearInterval(typingDiv.dataset.textInterval);
+                 typingDiv.parentNode.removeChild(typingDiv);
+             }
+         },
+         async displayBotMessage(formatted) {
+             return new Promise((resolve) => {
+                 const messageDiv = document.createElement('div');
+                 messageDiv.className = `message bot-message`;
+                 messagesArea.appendChild(messageDiv);
+                 messagesArea.scrollTop = messagesArea.scrollHeight;
+
+                 let index = 0;
+                 const typingInterval = setInterval(() => {
+                     if (index < formatted.length) {
+                         messageDiv.innerHTML = formatted.substring(0, index + 1);
+                         messagesArea.scrollTop = messagesArea.scrollHeight;
+                         index++;
+                     } else {
+                         clearInterval(typingInterval);
+                         messageDiv.innerHTML = formatted;
+                         Prism.highlightAll();
+                         resolve();
+                     }
+                 }, 5);
+             });
+         }
+     };
 
     const chatManager = {
         createNewChat(initialTitle = null) {
@@ -328,12 +335,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    async function callGoogleAI(apiKey, message, conversationHistory = []) {
-          let prompt = "";
-           conversationHistory.forEach(msg => {
-             prompt += `${msg.isUser ? "User: " : "AI: "} ${msg.text}\n`;
+    function optimizePrompt(message, conversationHistory) {
+        let optimizedPrompt = `Engage in deep reasoning and think step-by-step to provide the most comprehensive and accurate answer. Consider the conversation history for context.  \n\n`;
+        conversationHistory.forEach(msg => {
+            optimizedPrompt += `${msg.isUser ? "User: " : "AI: "} ${msg.text}\n`;
         });
-        prompt += `User: ${message}`;
+        optimizedPrompt += `User's current message: ${message}\n\n`;
+        optimizedPrompt += `AI Response: `;
+        return optimizedPrompt;
+    }
+
+
+    async function callGoogleAI(apiKey, message, conversationHistory = []) {
+          const optimizedPrompt = optimizePrompt(message, conversationHistory);
+          let prompt = optimizedPrompt;
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
         const data = {
             contents: [{
@@ -367,11 +382,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function callOpenAI(apiKey, message, conversationHistory = []) {
+        const optimizedPrompt = optimizePrompt(message, conversationHistory);
         const messages = conversationHistory.map(msg => ({
             role: msg.isUser ? "user" : "assistant",
             content: msg.text
         }));
-        messages.push({role: "user", content: message});
+        messages.push({role: "user", content: optimizedPrompt});
 
         const url = 'https://api.openai.com/v1/chat/completions';
         const data = {
@@ -465,8 +481,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let conversationHistory = [];
              if (currentChat && currentChat.messages) {
-                conversationHistory = currentChat.messages;
-            }
+                 conversationHistory = currentChat.messages;
+             }
 
             if (aiProvider === 'google') {
                 botResponse = await callGoogleAI(apiKey, message, conversationHistory);
@@ -476,34 +492,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 botResponse = "Invalid AI provider selected.";
             }
 
-            let languageClass = '';
-
-            if (message.toLowerCase().includes("code") || botResponse.startsWith("#!")) {
-                if (message.toLowerCase().includes("javascript") || message.toLowerCase().includes("js")) {
-                    languageClass = 'language-javascript';
-                } else if (message.toLowerCase().includes("python")) {
-                    languageClass = 'language-python';
-                } else if (message.toLowerCase().includes("css")) {
-                    languageClass = 'language-css';
-                } else if (message.toLowerCase().includes("html")) {
-                    languageClass = 'language-html';
-                } else if (message.toLowerCase().includes("java")) {
-                    languageClass = 'language-java';
-                } else {
-                    languageClass = 'language-javascript';
-                }
-                formattedResponse = `<pre><code class="${languageClass}">${utils.sanitizeInput(botResponse)}</code></pre>`;
-            } else if (message.toLowerCase().includes("poem") || message.toLowerCase().includes("song")) {
-                formattedResponse = botResponse.split('\n').map(line => `<div>${line}</div>`).join('');
-            } else {
-                formattedResponse = botResponse
+            formattedResponse = botResponse
                     .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
                     .replace(/\*(.*?)\*/g, '<em>$1</em>')
                     .replace(/`(.*?)`/g, '<code>$1</code>')
-                    .replace(/---/g, '<hr>');
+                    .replace(/---/g, '<hr>')
+                    .replace(/\n/g, '<br>');
 
-                formattedResponse = formattedResponse.replace(/\n/g, '<br>');
-            }
+            let languageClass = '';
+            if (botResponse.startsWith("#!")) {
+                 languageClass = 'language-javascript'; // Default, can be improved with better detection
+                 formattedResponse = `<pre><code class="${languageClass}">${utils.sanitizeInput(botResponse)}</code></pre>`;
+                 if (message.toLowerCase().includes("javascript") || message.toLowerCase().includes("js")) languageClass = 'language-javascript';
+                 if (message.toLowerCase().includes("python")) languageClass = 'language-python';
+                 if (message.toLowerCase().includes("css")) languageClass = 'language-css';
+                 if (message.toLowerCase().includes("html")) languageClass = 'language-html';
+                 if (message.toLowerCase().includes("java")) languageClass = 'language-java';
+                 formattedResponse = `<pre><code class="${languageClass}">${utils.sanitizeInput(botResponse.replace(/^#!/, '').trim())}</code></pre>`; // Remove #! and trim
+             }
 
             formattedResponse += `<br><span style="font-size: 0.8em; color: #ccc;">Visit <a href="https://craftedcodex.vercel.app/" target="_blank" style="color: #00d2ff;">CraftedCodeX</a> for more exciting projects!</span>`;
              await uiManager.displayBotMessage(formattedResponse);
@@ -521,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         uiManager.setLoading(false);
          chatManager.switchChat(STATE.currentChatId);
-    }
+     }
 
     function handleKeyPress(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
